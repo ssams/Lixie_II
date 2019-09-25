@@ -36,6 +36,7 @@ bool mask_fade_finished = false;
 
 uint8_t transition_type = CROSSFADE;
 bool transition_mid_point = true;
+volatile bool transition_running = false;
 
 Ticker lixie_animation;
 
@@ -93,7 +94,11 @@ void animate(){
 		//Serial.println(max_x_pos);
 	}
 			
-	lix_controller->showLeds();	
+	lix_controller->showLeds();
+
+	if(mask_fade_finished){
+		transition_running = false;
+	}
 }
 
 void Lixie_II::start_animation(){
@@ -167,14 +172,21 @@ void Lixie_II::clear_all(){
 	}
 }
 
-void Lixie_II::write(uint32_t input){
+void Lixie_II::write(uint32_t input, bool pad, bool skip_display){
 	//if(get_size(input) <= n_digits){
 		clear_all();
 		
 		uint32_t n_place = 1;
+		const uint8_t input_size = get_size(input);
 		// Powers of 10 while avoiding floating point math
-		for(uint8_t i = 1; i < get_size(input); i++){
+		for(uint8_t i = 1; i < input_size; i++){
 			n_place *= 10;
+		}
+
+		if(pad){
+			for(uint8_t i = 0; i < n_digits - input_size; i++) {
+				push_digit(0);
+			}
 		}
 
 		for(n_place; n_place > 0; n_place /= 10){
@@ -191,7 +203,9 @@ void Lixie_II::write(uint32_t input){
 		current_mask = 0;
 	}
 	
-	mask_update();
+	if(!skip_display){
+		mask_update();
+	}
 }
 
 void Lixie_II::write_float(float input_raw, uint8_t dec_places){
@@ -314,6 +328,8 @@ void Lixie_II::clear_digit(uint8_t digit, uint8_t num){
 }
 
 void Lixie_II::mask_update(){
+	transition_running = true;
+
 	mask_fader = 0.0;
 	
 	if(transition_type == INSTANT){
@@ -472,6 +488,10 @@ uint8_t Lixie_II::get_size(uint32_t input){
     input /= 10;
   }
   return places;
+}
+
+bool Lixie_II::is_transitioning(){
+	return transition_running;
 }
 
 /*

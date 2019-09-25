@@ -44,7 +44,7 @@ class Lixie_II
 		void sweep_gradient(CRGB col_left, CRGB col_right, uint16_t speed, uint8_t blur, bool reverse);
 		void start_animation();
 		void stop_animation();
-		void write(uint32_t input);
+		void write(uint32_t input, bool pad = false, bool skip_display = false);
 		void write_float(float input, uint8_t dec_places = 1);
 		void clear_all();
 		void write_digit(uint8_t digit, uint8_t num);
@@ -52,6 +52,9 @@ class Lixie_II
 		void clear_digit(uint8_t digit, uint8_t num);
 		void mask_update();
 		
+		// check if an transition animation is currently running (i.e. not yet finished) in 
+		// the background
+		bool is_transitioning();
 	private:
 		uint8_t get_size(uint32_t input);
 };
