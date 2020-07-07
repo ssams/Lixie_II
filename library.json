@@ -20,5 +20,12 @@
 	"avr",
     "esp8266",
 	"esp32"
+  ],
+  "dependencies":
+  [
+    {
+      "name": "FastLED",
+      "version": "^3.3.3"
+    }
   ]
 }
