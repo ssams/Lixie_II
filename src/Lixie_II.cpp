@@ -696,7 +696,7 @@ void Lixie_II::show(){
   mask_update();
 }
 
-bool Lixie_II::is_transitioning(){
+bool Lixie_II::is_transitioning() const{
 	return transition_running;
 }
 
