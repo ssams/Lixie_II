@@ -24,7 +24,8 @@
   "dependencies":
   [
     {
-      "name": "fastled/FastLED",
+      "owner": "fastled",
+      "name": "FastLED",
       "version": "^3.3.3"
     }
   ]
