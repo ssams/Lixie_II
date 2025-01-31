@@ -118,7 +118,7 @@ void animate(){
 	}
   }
       
-  lix_controller->showLeds(); 
+  lix_controller->showLeds(255); 
 
   if(mask_fade_finished){
 		transition_running = false;
@@ -592,7 +592,7 @@ void Lixie_II::streak(CRGB col, float pos, uint8_t blur){
     
     lix_leds[i] = CRGB(col.r * pos_level, col.g * pos_level, col.b * pos_level);
   }
-  lix_controller->showLeds();
+  lix_controller->showLeds(255);
 }
 
 void Lixie_II::sweep_color(CRGB col, uint16_t speed, uint8_t blur, bool reverse){
